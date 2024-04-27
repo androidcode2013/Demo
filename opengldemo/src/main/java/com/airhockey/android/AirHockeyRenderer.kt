@@ -10,7 +10,6 @@ import android.opengl.Matrix.multiplyMM
 import android.opengl.Matrix.rotateM
 import android.opengl.Matrix.setIdentityM
 import android.opengl.Matrix.translateM
-import android.util.Log
 import com.airhockey.android.objects.Mallet
 import com.airhockey.android.objects.Table
 import com.airhockey.android.programs.ColorShaderProgram
