@@ -2,6 +2,8 @@ package com.airhockey.android
 
 import android.content.Context
 import android.opengl.GLES20.GL_COLOR_BUFFER_BIT
+import android.opengl.GLES20.GL_TEXTURE0
+import android.opengl.GLES20.GL_TEXTURE1
 import android.opengl.GLES20.glClear
 import android.opengl.GLES20.glClearColor
 import android.opengl.GLES20.glViewport
@@ -34,7 +36,7 @@ class AirHockeyRenderer(context: Context) : Renderer {
     private var colorShaderProgram: ColorShaderProgram? = null
 
     private var textureId = 0
-
+    private var textureIdImage = 0
     override fun onSurfaceCreated(gl: GL10?, config: EGLConfig?) {
         glClearColor(0.0f, 0.0f, 0.0f, 0.0f)
 
@@ -45,6 +47,8 @@ class AirHockeyRenderer(context: Context) : Renderer {
         colorShaderProgram = ColorShaderProgram(mContext!!)
 
         textureId = loadTexture(mContext!!, R.mipmap.air_hockey_surface)
+        textureIdImage = loadTexture(mContext!!, R.mipmap.red)
+
     }
 
     override fun onSurfaceChanged(gl: GL10?, width: Int, height: Int) {
@@ -74,7 +78,9 @@ class AirHockeyRenderer(context: Context) : Renderer {
         glClear(GL_COLOR_BUFFER_BIT)
 
         textureShaderProgram?.useProgram()
-        textureShaderProgram?.setUniforms(projectionMatrix,textureId)
+        textureShaderProgram?.setUniforms(projectionMatrix, textureId, GL_TEXTURE0)
+        textureShaderProgram?.setUniforms(projectionMatrix, textureIdImage, GL_TEXTURE1)
+
         table?.bindData(textureShaderProgram!!)
         table?.draw()
 
