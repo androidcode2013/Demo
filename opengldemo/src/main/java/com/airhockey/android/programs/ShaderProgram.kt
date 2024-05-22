@@ -10,6 +10,7 @@ val U_TEXTURE_UNIT = "u_TextureUnit"
 val A_POSITION = "a_Position"
 val A_COLOR = "a_Color"
 val A_TEXTURE_COORDINATES = "a_TextureCoordinates"
+val U_COLOR = "u_Color"
 
 open class ShaderProgram(
     context: Context, vertexShaderResourceSource: String?,

@@ -1,41 +1,42 @@
 package com.airhockey.android.objects
 
-import android.opengl.GLES20
-import com.airhockey.android.BYTES_PER_FLOAT
-import com.airhockey.android.COLOR_COMPONENT_COUNT
-import com.airhockey.android.POSITION_COMPONENT_COUNT
 import com.airhockey.android.data.VertexArray
 import com.airhockey.android.programs.ColorShaderProgram
+import com.airhockey.android.util.Geometry
 
-private val STRIDE =
-    (POSITION_COMPONENT_COUNT + COLOR_COMPONENT_COUNT) * BYTES_PER_FLOAT
+class Mallet() {
+    val POSITION_COMPONENT_COUNT = 3
+    var radius = 0f
+    var height = 0f
+    var generatedData : GeneratedData? = null
+    var vertexArray : VertexArray? = null
+    var drawList : List<DrawCommand>? = null
 
-class Mallet {
-    private var VERTEX_DATA = floatArrayOf(
-        //x,y,r,g,b
-        //木槌
-        0.0f, -0.4f, 0.0f, 0.0f, 1.0f,
-        0.0f, 0.4f, 1.0f, 0.0f, 0.0f
-    )
-
-    val vertexArray: VertexArray = VertexArray(VERTEX_DATA)
-
-    fun bindData(textureProgram: ColorShaderProgram) {
-        vertexArray.setVertexAttribPointer(
+    constructor(radius: Float, height: Float, numPointsAroundMallet: Int) : this() {
+        this.radius = radius
+        this.height = height
+        this.generatedData =
+            createMallet(
+                Geometry.Companion.Point(0f, 0f, 0f),
+                radius,
+                height,
+                numPointsAroundMallet)
+        this.vertexArray = VertexArray(generatedData!!.vertexData!!)
+        this.drawList = generatedData!!.drawList
+    }
+    fun bindData(colorProgram: ColorShaderProgram) {
+        vertexArray?.setVertexAttribPointer(
             0,
-            textureProgram.getPositionAttribLocation(),
+            colorProgram.getPositionAttribLocation(),
             POSITION_COMPONENT_COUNT,
-            STRIDE
-        )//把位置数据绑定到着色器属性aPosition上
-        vertexArray.setVertexAttribPointer(
-            POSITION_COMPONENT_COUNT,
-            textureProgram.getColorAttribLocation(),
-            COLOR_COMPONENT_COUNT,
-            STRIDE
-        )//绑定纹理坐标数据到着色器属性aTextureCoordinates上
+            0
+        )
     }
 
-    fun draw(){
-        GLES20.glDrawArrays(GLES20.GL_POINTS, 0, 2)
+    fun draw() {
+        for (index in drawList?.indices!!) {
+            drawList?.get(index)?.draw()
+        }
+
     }
 }

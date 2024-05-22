@@ -17,26 +17,25 @@ class TextureShaderProgram : ShaderProgram {
         context, vertexShaderResourceSource =
         "uniform mat4 u_Matrix;\n" +
                 "\n" +
-                "attribute vec4 a_Position;\n" +
+                "attribute vec4 a_Position;  \n" +
                 "attribute vec2 a_TextureCoordinates;\n" +
                 "\n" +
                 "varying vec2 v_TextureCoordinates;\n" +
                 "\n" +
-                "void main(){\n" +
-                "v_TextureCoordinates = a_TextureCoordinates;\n" +
-                "gl_Position = u_Matrix * a_Position;\n" +
-                "}",
+                "void main()                    \n" +
+                "{                            \n" +
+                "    v_TextureCoordinates = a_TextureCoordinates;\t  \t  \n" +
+                "    gl_Position = u_Matrix * a_Position;    \n" +
+                "}          ",
             fragmentShaderResourceSource =
             "precision mediump float; \n" +
                     "      \t \t\t\t\t\n" +
-                    "uniform sampler2D u_TextureUnit0;   \n" +
-                    "uniform sampler2D u_TextureUnit1;     \t \t\t\t\t\t\t\t\t\n" +
+                    "uniform sampler2D u_TextureUnit;      \t \t\t\t\t\t\t\t\n" +
                     "varying vec2 v_TextureCoordinates;      \t   \t\t\t\t\t\t\t\t\n" +
                     "  \n" +
                     "void main()                    \t\t\n" +
                     "{                              \t\n" +
-                    "    gl_FragColor = texture2D(u_TextureUnit0, v_TextureCoordinates) " +
-                    "+ texture2D(u_TextureUnit1, v_TextureCoordinates);                           \t\t\n" +
+                    "    gl_FragColor = texture2D(u_TextureUnit, v_TextureCoordinates);                           \t\t\n" +
                     "}"
     ) {
         uMatrixLocation = glGetUniformLocation(program, U_MATRIX)
@@ -46,9 +45,9 @@ class TextureShaderProgram : ShaderProgram {
         aTextureCoordinatesLocation = glGetAttribLocation(program, A_TEXTURE_COORDINATES)
     }
 
-    fun setUniforms(matrix: FloatArray, textureId: Int, textureUnit: Int) {
+    fun setUniforms(matrix: FloatArray, textureId: Int) {
         glUniformMatrix4fv(uMatrixLocation, 1, false, matrix, 0)
-        glActiveTexture(textureUnit)//GL_TEXTURE0
+        glActiveTexture(GL_TEXTURE0)//GL_TEXTURE0
         glBindTexture(GL_TEXTURE_2D, textureId)
         glUniform1f(uTextureUnitLocation, 0f)
     }
