@@ -21,7 +21,7 @@ class ObjectBuilder(sizeInVertices: Int) {
         //Fan around center point,<= is used because we want to generate
         // the point at the starting angle twice to complete the fan.
 
-        for (i in 1 until numPoints step 1) {
+        for (i in 0 until numPoints+1 step 1) {
             var angleInRadians =
                 (i.toFloat() / numPoints.toFloat()) * (Math.PI * 2f)
             vertexData[offset++] =
