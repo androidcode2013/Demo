@@ -39,7 +39,7 @@ class ShaderHelper {
 fun compileShader(type: Int, shaderCode: String): Int {
     var shaderObjectId = glCreateShader(type)//获取着色器对象
     if (shaderObjectId == 0) {
-        Log.e(TAG, "whx#can not create new shader.")
+        Log.e(TAG, "can not create new shader.")
         return 0
     }
     glShaderSource(shaderObjectId, shaderCode)//上传源代码
@@ -49,7 +49,7 @@ fun compileShader(type: Int, shaderCode: String): Int {
     Log.v(TAG, "shader info:" + glGetShaderInfoLog(shaderObjectId))
     if (compileStatus[0] == 0) {
         glDeleteShader(shaderObjectId)
-        Log.e(TAG, "whx#complie shader failed.")
+        Log.e(TAG, "complie shader failed.")
         return 0
     }
     return shaderObjectId
@@ -66,7 +66,7 @@ fun compileFragementShader(shaderCode: String): Int {
 fun linkProgram(vertexShaderId: Int, fragmentShaderId: Int): Int {
     var programObjectId = glCreateProgram()
     if (programObjectId == 0) {
-        Log.e(TAG, "whx#can not create new program.")
+        Log.e(TAG, "can not create new program.")
         return 0
     }
     glAttachShader(programObjectId, vertexShaderId)
@@ -77,7 +77,7 @@ fun linkProgram(vertexShaderId: Int, fragmentShaderId: Int): Int {
     Log.d(TAG, "program info:" + glGetProgramInfoLog(programObjectId))
     if (linkStatus[0] == 0) {
         glDeleteProgram(programObjectId)
-        Log.e(TAG, "whx#link program failed.")
+        Log.e(TAG, "link program failed.")
     }
     return programObjectId
 }

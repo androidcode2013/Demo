@@ -28,9 +28,9 @@ class TextResourceReader {
                     body.append('\n')
                 }
             } catch (e: IOException) {
-                Log.e(TAG,"whx#could not open resource:" + resourceId)
+                Log.e(TAG,"could not open resource:" + resourceId)
             } catch (e: Resources.NotFoundException) {
-                Log.e(TAG,"whx#resource not found:" + resourceId)
+                Log.e(TAG,"resource not found:" + resourceId)
             }
             return null
         }
