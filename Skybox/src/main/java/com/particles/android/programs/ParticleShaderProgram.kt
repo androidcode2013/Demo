@@ -28,7 +28,7 @@ class ParticleShaderProgram(
         //retrieve uniform location for the shader program
         uMatrixLocation = GLES20.glGetUniformLocation(program, U_MATRIX)
         uTimeLocation = GLES20.glGetUniformLocation(program, U_TIME)
-        uTextureUnitLocation = GLES20.glGetUniformLocation(program, U_TEXTUREUNIT)
+        uTextureUnitLocation = GLES20.glGetUniformLocation(program, U_TEXTURE_UNIT)
         //retrieve attribute location for the shader program
         aPositionLocation = GLES20.glGetAttribLocation(program, A_POSITION)
         aColorLocation = GLES20.glGetAttribLocation(program, A_COLOR)
