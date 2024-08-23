@@ -23,3 +23,6 @@ rootProject.name = "Demo"
 include(":app")
 include(":leakcanarydemo")
 include(":opengldemo")
+include(":Particles")
+include(":Skybox")
+include(":Heightmap")
