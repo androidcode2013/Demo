@@ -1,5 +1,6 @@
 package com.particles.android
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.ActivityManager
 import android.opengl.GLSurfaceView
@@ -10,13 +11,15 @@ import android.view.View
 import android.widget.Toast
 
 private operator fun Float.div(value: Float.Companion): Float {
-    return this/value
+    return this / value
 }
 
-class ParticlesActivity: Activity() {
+class ParticlesActivity : Activity() {
     var TAG = "ParticlesActivity"
     var mGLSurfaceView: GLSurfaceView? = null
-    var renderSet:Boolean = false
+    var renderSet: Boolean = false
+
+    @SuppressLint("ClickableViewAccessibility")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         mGLSurfaceView = GLSurfaceView(this)
@@ -71,6 +74,25 @@ class ParticlesActivity: Activity() {
             ).show()
             return
         }
+        var previousX = 0f
+        var previousY = 0f
+        mGLSurfaceView!!.setOnTouchListener { v, event ->
+            if (event != null) {
+                if (event.action == MotionEvent.ACTION_DOWN) {
+                    previousX = event.x
+                    previousY = event.y
+                } else if (event.action == MotionEvent.ACTION_MOVE) {
+                    val deltaX = event.x - previousX
+                    val deltaY = event.y - previousY
+                    previousX = event.x
+                    previousY = event.y
+                    mGLSurfaceView!!.queueEvent {
+                        particlesRenderer.handleTouchDrag(deltaX, deltaY)
+                    }
+                }
+                true
+            } else false
+        }
         setContentView(mGLSurfaceView)
     }
 
@@ -81,6 +103,6 @@ class ParticlesActivity: Activity() {
 
     override fun onPause() {
         super.onPause()
-        if(renderSet) mGLSurfaceView?.onPause()
+        if (renderSet) mGLSurfaceView?.onPause()
     }
 }

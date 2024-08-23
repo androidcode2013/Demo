@@ -13,6 +13,7 @@ import android.opengl.GLES20.glEnable
 import android.opengl.GLES20.glViewport
 import android.opengl.GLSurfaceView.Renderer
 import android.opengl.Matrix.multiplyMM
+import android.opengl.Matrix.rotateM
 import android.opengl.Matrix.setIdentityM
 import android.opengl.Matrix.translateM
 import android.os.Build
@@ -116,6 +117,8 @@ class ParticlesRenderer(private var context: Context) : Renderer {
 
     fun drawSkybox() {
         setIdentityM(viewMatrix, 0)
+        rotateM(viewMatrix,0,-yRotation,1f,0f,0f)
+        rotateM(viewMatrix,0,-xRotation,0f,1f,0f)
         multiplyMM(viewProjectionMatrix, 0, projectionMatrix, 0, viewMatrix, 0)
         skyboxShaderProgram?.useProgram()
         skyboxShaderProgram?.setUniforms(viewProjectionMatrix, skyboxTexture)
@@ -131,6 +134,8 @@ class ParticlesRenderer(private var context: Context) : Renderer {
         blueParticleShooter?.addParticles(particleSystem!!, currentTime, 1)
 
         setIdentityM(viewMatrix, 0)
+        rotateM(viewMatrix,0,-yRotation,1f,0f,0f)
+        rotateM(viewMatrix,0,-xRotation,0f,1f,0f)
         translateM(viewMatrix, 0, 0f, -1.5f, -5f)
         multiplyMM(viewProjectionMatrix, 0, projectionMatrix, 0, viewMatrix, 0)
 
@@ -143,5 +148,17 @@ class ParticlesRenderer(private var context: Context) : Renderer {
         particleSystem?.draw()
 
         glDisable(GL_BLEND)
+    }
+
+    private var xRotation = 0f
+    private var yRotation = 0f
+    fun handleTouchDrag(deltaX: Float, deltaY: Float) {
+        xRotation += deltaX / 16f
+        yRotation += deltaY / 16f
+        if (yRotation < -90) {
+            yRotation = -90f
+        } else if (yRotation > 90) {
+            yRotation = 90f
+        }
     }
 }
