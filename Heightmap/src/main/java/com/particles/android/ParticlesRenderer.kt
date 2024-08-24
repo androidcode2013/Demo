@@ -77,6 +77,8 @@ class ParticlesRenderer(private var context: Context) : Renderer {
     override fun onSurfaceCreated(gl: GL10?, config: EGLConfig?) {
         glClearColor(0.0f, 0.0f, 0.0f, 0.0f)
 
+        glEnable(GL_CULL_FACE)
+
         particleShaderProgram = ParticleShaderProgram(context)
         particleSystem = ParticleSystem(10000)
         globalStartTime = System.nanoTime()
