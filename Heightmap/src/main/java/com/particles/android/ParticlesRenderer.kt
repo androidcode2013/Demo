@@ -4,12 +4,17 @@ import android.content.Context
 import android.graphics.Color
 import android.opengl.GLES20.GL_BLEND
 import android.opengl.GLES20.GL_COLOR_BUFFER_BIT
+import android.opengl.GLES20.GL_CULL_FACE
 import android.opengl.GLES20.GL_DEPTH_BUFFER_BIT
 import android.opengl.GLES20.GL_DEPTH_TEST
+import android.opengl.GLES20.GL_LEQUAL
+import android.opengl.GLES20.GL_LESS
 import android.opengl.GLES20.GL_ONE
 import android.opengl.GLES20.glBlendFunc
 import android.opengl.GLES20.glClear
 import android.opengl.GLES20.glClearColor
+import android.opengl.GLES20.glDepthFunc
+import android.opengl.GLES20.glDepthMask
 import android.opengl.GLES20.glDisable
 import android.opengl.GLES20.glEnable
 import android.opengl.GLES20.glViewport
@@ -125,23 +130,24 @@ class ParticlesRenderer(private var context: Context) : Renderer {
 
     @RequiresApi(Build.VERSION_CODES.UPSIDE_DOWN_CAKE)
     override fun onDrawFrame(gl: GL10?) {
-        glClear(GL_COLOR_BUFFER_BIT)
+        glClear(GL_COLOR_BUFFER_BIT or GL_DEPTH_BUFFER_BIT)
 
-        drawSkybox()
+        glEnable(GL_DEPTH_TEST)
         drawHeightmap()
+        drawSkybox()
         drawParticles()
     }
 
     private fun drawSkybox() {
         setIdentityM(modelMatrix, 0)
         updateMvpMatrixForSkybox()
-//        rotateM(viewMatrix,0,-yRotation,1f,0f,0f)
-//        rotateM(viewMatrix,0,-xRotation,0f,1f,0f)
-//        multiplyMM(viewProjectionMatrix, 0, projectionMatrix, 0, viewMatrix, 0)
+
+        glDepthFunc(GL_LEQUAL)
         skyboxShaderProgram?.useProgram()
         skyboxShaderProgram?.setUniforms(modelViewProjectionMatrix, skyboxTexture)
         skybox?.bindData(skyboxShaderProgram!!)
         skybox?.draw()
+        glDepthFunc(GL_LESS)
     }
 
     @RequiresApi(Build.VERSION_CODES.UPSIDE_DOWN_CAKE)
@@ -153,11 +159,8 @@ class ParticlesRenderer(private var context: Context) : Renderer {
 
         setIdentityM(modelMatrix, 0)
         updateMvpMatrix()
-//        rotateM(viewMatrix,0,-yRotation,1f,0f,0f)
-//        rotateM(viewMatrix,0,-xRotation,0f,1f,0f)
-//        translateM(viewMatrix, 0, 0f, -1.5f, -5f)
-//        multiplyMM(viewProjectionMatrix, 0, projectionMatrix, 0, viewMatrix, 0)
 
+        glDepthMask(false)
         glEnable(GL_BLEND)
         glBlendFunc(GL_ONE, GL_ONE)
 
@@ -167,6 +170,7 @@ class ParticlesRenderer(private var context: Context) : Renderer {
         particleSystem?.draw()
 
         glDisable(GL_BLEND)
+        glDepthMask(true)
     }
 
     private fun drawHeightmap() {
