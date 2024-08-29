@@ -5,6 +5,7 @@ import android.graphics.Color
 import android.opengl.GLES20.GL_BLEND
 import android.opengl.GLES20.GL_COLOR_BUFFER_BIT
 import android.opengl.GLES20.GL_CULL_FACE
+import android.opengl.GLES20.GL_CW
 import android.opengl.GLES20.GL_DEPTH_BUFFER_BIT
 import android.opengl.GLES20.GL_DEPTH_TEST
 import android.opengl.GLES20.GL_LEQUAL
@@ -17,6 +18,7 @@ import android.opengl.GLES20.glDepthFunc
 import android.opengl.GLES20.glDepthMask
 import android.opengl.GLES20.glDisable
 import android.opengl.GLES20.glEnable
+import android.opengl.GLES20.glFrontFace
 import android.opengl.GLES20.glViewport
 import android.opengl.GLSurfaceView.Renderer
 import android.opengl.Matrix.multiplyMM
@@ -77,7 +79,8 @@ class ParticlesRenderer(private var context: Context) : Renderer {
     override fun onSurfaceCreated(gl: GL10?, config: EGLConfig?) {
         glClearColor(0.0f, 0.0f, 0.0f, 0.0f)
 
-        glEnable(GL_CULL_FACE)
+        glEnable(GL_CULL_FACE)//开启剔除功能，默认剔除背面
+//        glFrontFace(GL_CW)
 
         particleShaderProgram = ParticleShaderProgram(context)
         particleSystem = ParticleSystem(10000)
@@ -132,9 +135,9 @@ class ParticlesRenderer(private var context: Context) : Renderer {
 
     @RequiresApi(Build.VERSION_CODES.UPSIDE_DOWN_CAKE)
     override fun onDrawFrame(gl: GL10?) {
-        glClear(GL_COLOR_BUFFER_BIT or GL_DEPTH_BUFFER_BIT)
+        glClear(GL_COLOR_BUFFER_BIT or GL_DEPTH_BUFFER_BIT)//清空深度缓冲区
 
-        glEnable(GL_DEPTH_TEST)
+        glEnable(GL_DEPTH_TEST)//开启深度测试功能
         drawHeightmap()
         drawSkybox()
         drawParticles()
@@ -144,12 +147,12 @@ class ParticlesRenderer(private var context: Context) : Renderer {
         setIdentityM(modelMatrix, 0)
         updateMvpMatrixForSkybox()
 
-        glDepthFunc(GL_LEQUAL)
+        glDepthFunc(GL_LEQUAL)//设置新的深度值<深度缓冲中深度数值，通过深度测试，更新深度缓冲中数值为新值
         skyboxShaderProgram?.useProgram()
         skyboxShaderProgram?.setUniforms(modelViewProjectionMatrix, skyboxTexture)
         skybox?.bindData(skyboxShaderProgram!!)
         skybox?.draw()
-        glDepthFunc(GL_LESS)
+        glDepthFunc(GL_LESS)//重置为默认值GL_LESS
     }
 
     @RequiresApi(Build.VERSION_CODES.UPSIDE_DOWN_CAKE)
