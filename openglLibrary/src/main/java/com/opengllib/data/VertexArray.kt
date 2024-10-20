@@ -20,10 +20,12 @@ class VertexArray(vertexData: FloatArray) {
         componentCount: Int, stride: Int
     ) {
         floatBuffer.position(dataOffSet)
+        //将顶点位置数据送入渲染管线
         glVertexAttribPointer(
             attributeLocation, componentCount, GL_FLOAT,
             false, stride, floatBuffer
         )
+        //启用顶点位置属性
         glEnableVertexAttribArray(attributeLocation)
         floatBuffer.position(0)
     }
