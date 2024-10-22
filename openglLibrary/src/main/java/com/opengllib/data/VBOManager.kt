@@ -42,7 +42,7 @@ class VBOManager(vertexData: FloatArray) {
     }
 
     fun setVertexAttributePointer(attributeLocation: Int, size: Int, stride: Int) {
-        //4.将顶点位置数据送入渲染管线
+        //4.将顶点位置数据送入渲染管线. 用于将当前的顶点属性与顶点缓冲对象（VBO）关联起来
         GLES20.glVertexAttribPointer(
             attributeLocation,
             size,
