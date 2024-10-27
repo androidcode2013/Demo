@@ -21,6 +21,7 @@ open class ShaderProgram(
         const val A_COLOR = "a_Color"
         const val A_DIRECTION_VECTOR = "a_DirectionVector"
         const val A_PARTICLE_START_TIME = "a_ParticleStartTime"
+        const val A_TEXTURE_COORDINATES = "a_TextureCoordinates"
     }
     var program = ShaderHelper.bindProgram(
         readTextFileFromResource(context, vertexShaderResourceId!!)!!,
@@ -28,12 +29,18 @@ open class ShaderProgram(
     )
     var aPositionLocation = 0
     var aColorLocation = 0
+    var aTextureCoordinatesLocation = 0
     var uColorLocation = 0
+    var uTextureUnitLocation = 0
+    var uMatrixLocation = 0
 
     init {
         aPositionLocation = GLES20.glGetAttribLocation(program, A_POSITION)
         aColorLocation = GLES20.glGetAttribLocation(program, A_COLOR)
+        aTextureCoordinatesLocation = GLES20.glGetAttribLocation(program, A_TEXTURE_COORDINATES)
         uColorLocation = GLES20.glGetUniformLocation(program, U_COLOR)
+        uTextureUnitLocation = GLES20.glGetUniformLocation(program, U_TEXTURE_UNIT)
+        uMatrixLocation = GLES20.glGetUniformLocation(program, U_MATRIX)
     }
 
     fun useProgram() {
@@ -50,5 +57,9 @@ open class ShaderProgram(
 
     fun getColorUniformLocation(): Int {
         return uColorLocation
+    }
+
+    fun getTextureCoordinatesAttribLocation(): Int {
+        return aTextureCoordinatesLocation
     }
 }
