@@ -2,14 +2,18 @@ package com.opengllib.data
 
 import android.opengl.GLES30
 
-class FBOManager {
+class FBOManager: BaseManager() {
     private val TAG = "FBOManager"
-
+    /**
+     * 生成FBO
+     */
+    fun genFBO(fboIds: IntArray) {
+        GLES30.glGenFramebuffers(fboIds.size, fboIds, 0)
+    }
     /**
      * 绑定FBO
      */
     fun bindFBO(fboIds: IntArray) {
-        GLES30.glGenFramebuffers(fboIds.size, fboIds, 0)
         GLES30.glBindFramebuffer(GLES30.GL_FRAMEBUFFER, fboIds[0]);
     }
 
@@ -19,14 +23,6 @@ class FBOManager {
     fun bindRBO(rboIds: IntArray) {
         GLES30.glGenRenderbuffers(rboIds.size, rboIds, 0);
         GLES30.glBindRenderbuffer(GLES30.GL_RENDERBUFFER, rboIds[0]);
-    }
-
-    /**
-     * 绑定纹理
-     */
-    fun bindTexture(textureIds: IntArray) {
-        GLES30.glGenTextures(textureIds.size, textureIds, 0)
-        GLES30.glBindTexture(GLES30.GL_TEXTURE_2D, textureIds[0])
     }
 
     /**
@@ -61,6 +57,27 @@ class FBOManager {
      * 创建纹理并附加到FBO上
      */
     fun attachTextureToFBO(textureIds: IntArray, width: Int, height: Int) {
+        //设置采样，拉伸方式
+        GLES30.glTexParameterf(
+            GLES30.GL_TEXTURE_2D,
+            GLES30.GL_TEXTURE_MIN_FILTER,
+            GLES30.GL_NEAREST.toFloat()
+        )
+        GLES30.glTexParameterf(
+            GLES30.GL_TEXTURE_2D,
+            GLES30.GL_TEXTURE_MAG_FILTER,
+            GLES30.GL_LINEAR.toFloat()
+        )
+        GLES30.glTexParameterf(
+            GLES30.GL_TEXTURE_2D,
+            GLES30.GL_TEXTURE_WRAP_S,
+            GLES30.GL_MIRRORED_REPEAT.toFloat()
+        )
+        GLES30.glTexParameterf(
+            GLES30.GL_TEXTURE_2D,
+            GLES30.GL_TEXTURE_WRAP_T,
+            GLES30.GL_MIRRORED_REPEAT.toFloat()
+        )
         /**
          * 注意：我们在 glTexImage2D 的数据data 那里设置了 null，
          * 因为我们只需要内存地址，暂时不需要去填充它，然后环绕方式，我们也不用太去关注，
@@ -81,33 +98,12 @@ class FBOManager {
         )
     }
 
-    fun setVertexAttributePointer(attributeLocation: Int, size: Int, stride: Int) {
-        //将顶点位置数据送入渲染管线. 用于将当前的顶点属性与顶点缓冲对象（VBO）关联起来
-        GLES30.glVertexAttribPointer(
-            attributeLocation,
-            size,
-            GLES30.GL_FLOAT,
-            false,
-            stride,
-            0
-        )
-        //启用顶点位置属性
-        GLES30.glEnableVertexAttribArray(attributeLocation)
-    }
-
     /**
      * 检查FBO的完整性
      */
     fun isCheckFBO(): Boolean {
         return (GLES30.glCheckFramebufferStatus(GLES30.GL_FRAMEBUFFER)
                 == GLES30.GL_FRAMEBUFFER_COMPLETE)
-    }
-
-    /**
-     * 解绑纹理
-     */
-    fun unbindTexture() {
-        GLES30.glBindTexture(GLES30.GL_TEXTURE_2D, 0)
     }
 
     /**
@@ -118,4 +114,7 @@ class FBOManager {
         GLES30.glBindFramebuffer(GLES30.GL_FRAMEBUFFER, 0)
     }
 
+    fun deleteFBO(fboIds: IntArray) {
+        GLES30.glDeleteFramebuffers(fboIds.size, fboIds, 0)
+    }
 }

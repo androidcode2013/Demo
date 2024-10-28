@@ -3,9 +3,10 @@ package com.opengllib.programs
 import android.content.Context
 import android.opengl.GLES20
 import android.opengl.GLES20.glUseProgram
-import android.util.Log
+import android.opengl.GLES30
 import com.opengllib.util.ShaderHelper
 import com.opengllib.util.TextResourceReader.Companion.readTextFileFromResource
+import java.nio.Buffer
 
 open class ShaderProgram(
     context: Context, vertexShaderResourceId: Int?,
@@ -59,7 +60,45 @@ open class ShaderProgram(
         return uColorLocation
     }
 
+    fun getTextureUniformLocation(): Int {
+        return uTextureUnitLocation
+    }
+
     fun getTextureCoordinatesAttribLocation(): Int {
         return aTextureCoordinatesLocation
+    }
+
+    fun setUniforms(uniformLocation: Int) {
+        GLES20.glUniform1f(uniformLocation, 0f)
+    }
+
+    fun bindTexture(textureId: Int) {
+        GLES20.glActiveTexture(textureId)
+        GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, textureId)
+    }
+
+    fun enableVertexAttributePointer(
+        attributeLocation: Int,
+        size: Int,
+        type: Int,
+        normalize: Boolean,
+        stride: Int,
+        ptr: Buffer
+    ) {
+        //将顶点位置数据送入渲染管线. 用于将当前的顶点属性与顶点缓冲对象（VBO）关联起来
+        GLES30.glVertexAttribPointer(
+            attributeLocation,
+            size,
+            type,
+            normalize,
+            stride,
+            ptr
+        )
+        //启用顶点位置属性
+        GLES30.glEnableVertexAttribArray(attributeLocation)
+    }
+
+    fun draw(mode: Int, first: Int, count: Int) {
+        GLES30.glDrawArrays(mode, first, count)
     }
 }

@@ -1,6 +1,7 @@
 package com.opengllib.data
 
 import android.opengl.GLES20.GL_FLOAT
+import android.opengl.GLES20.glDisableVertexAttribArray
 import android.opengl.GLES20.glEnableVertexAttribArray
 import android.opengl.GLES20.glVertexAttribPointer
 import com.opengllib.util.BYTES_PER_FLOAT
@@ -30,7 +31,11 @@ class VertexArray(vertexData: FloatArray) {
         floatBuffer.position(0)
     }
 
-    fun updateBuffer(vertexData: FloatArray, start: Int, count: Int){
+    fun disableVertexAttribPointer(attributeLocation: Int) {
+        glDisableVertexAttribArray(attributeLocation)
+    }
+
+    fun updateBuffer(vertexData: FloatArray, start: Int, count: Int) {
         floatBuffer.position(start)
         floatBuffer.put(vertexData, start, count)
         floatBuffer.position(0)
