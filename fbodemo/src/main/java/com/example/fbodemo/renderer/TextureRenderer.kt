@@ -3,27 +3,26 @@ package com.example.fbodemo.renderer
 import android.content.Context
 import android.opengl.GLES30
 import android.opengl.GLSurfaceView.Renderer
-import android.util.Log
 import com.example.fbodemo.R
-import com.example.fbodemo.data.Girl
+import com.example.fbodemo.data.Image
 import com.example.fbodemo.programs.TextureShaderProgram
 import com.opengllib.util.loadTexture
 import javax.microedition.khronos.egl.EGLConfig
 import javax.microedition.khronos.opengles.GL10
 
 /**
- * 图片纹理渲染到默认缓冲区
+ * 图片纹理渲染到默认缓冲
  */
 class TextureRenderer(context: Context) : Renderer {
     private val TAG = "TextureRenderer"
     private var mContext = context
     private var mTextureShaderProgram: TextureShaderProgram? = null
-    private var mGirl: Girl? = null
+    private var mGirl: Image? = null
     private var mTextureId = 0
 
     override fun onSurfaceCreated(gl: GL10?, config: EGLConfig?) {
         GLES30.glClearColor(0.0f, 1.0f, 0.0f, 1.0f)
-        mTextureId = loadTexture(mContext, R.mipmap.girl)
+        mTextureId = loadTexture(mContext, R.mipmap.scenery)
         mTextureShaderProgram =
             TextureShaderProgram(
                 mContext,
@@ -31,7 +30,7 @@ class TextureRenderer(context: Context) : Renderer {
                 R.raw.fbo_fragment_shader
             )
         mTextureShaderProgram!!.useProgram()
-        mGirl = Girl()
+        mGirl = Image()
     }
 
     override fun onSurfaceChanged(gl: GL10?, width: Int, height: Int) {
@@ -40,8 +39,9 @@ class TextureRenderer(context: Context) : Renderer {
 
     override fun onDrawFrame(gl: GL10?) {
         GLES30.glClear(GLES30.GL_COLOR_BUFFER_BIT)
-        mTextureShaderProgram!!.setUniforms(mTextureId)
-        mGirl!!.setVertexAttribPointer(mTextureShaderProgram!!)
+        mTextureShaderProgram!!.bindTexture(mTextureId)
+        mTextureShaderProgram!!.setUniforms(mTextureShaderProgram!!.getTextureUniformLocation())
+        mGirl!!.enableVertexAttribPointer(mTextureShaderProgram!!)
         mGirl!!.draw()
     }
 }

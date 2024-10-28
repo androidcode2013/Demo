@@ -5,16 +5,16 @@ import com.example.fbodemo.programs.TextureShaderProgram
 import com.opengllib.data.VertexArray
 import com.opengllib.util.BYTES_PER_FLOAT
 
-class Girl {
+class Image {
     private val VERTEX_DATA = floatArrayOf(
         //x,y,s,t
         //x,y为顶点位置坐标，s,t为纹理坐标
         0.0f, 0.0f, 0.5f, 0.5f,
-        -0.5f, -0.8f, 0.0f, 0.9f,
-        0.5f, -0.8f, 1.0f, 0.9f,
-        0.5f, 0.8f, 1.0f, 0.1f,
-        -0.5f, 0.8f, 0.0f, 0.1f,
-        -0.5f, -0.8f, 0.0f, 0.9f,
+        -1.5f, -0.8f, 0.0f, 0.9f,
+        1.5f, -0.8f, 1.0f, 0.9f,
+        1.5f, 0.8f, 1.0f, 0.1f,
+        -1.5f, 0.8f, 0.0f, 0.1f,
+        -1.5f, -0.8f, 0.0f, 0.9f,
     )
 
     private val vertexArray: VertexArray = VertexArray(VERTEX_DATA)
@@ -23,7 +23,7 @@ class Girl {
     private val STRIDE =
         (POSITION_COMPONENT_COUNT + TEXTURE_COORDINATES_COMPONENT_COUNT) * BYTES_PER_FLOAT
 
-    fun setVertexAttribPointer(textureProgram: TextureShaderProgram) {
+    fun enableVertexAttribPointer(textureProgram: TextureShaderProgram) {
         vertexArray.setVertexAttribPointer(
             0,
             textureProgram.getPositionAttributeLocation(),
@@ -36,6 +36,11 @@ class Girl {
             TEXTURE_COORDINATES_COMPONENT_COUNT,
             STRIDE
         )//绑定纹理坐标数据到着色器属性aTextureCoordinates上
+    }
+
+    fun disableVertexAttribPointer(textureProgram: TextureShaderProgram) {
+        vertexArray.disableVertexAttribPointer(textureProgram.getPositionAttributeLocation())
+        vertexArray.disableVertexAttribPointer(textureProgram.getTextureCoordinatesAttribLocation())
     }
 
     fun draw() {
