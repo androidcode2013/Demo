@@ -2,7 +2,7 @@ package com.opengllib.data
 
 import android.opengl.GLES30
 
-class FBOManager: BaseManager() {
+class FBOManager : BaseManager() {
     private val TAG = "FBOManager"
     /**
      * 生成FBO
@@ -18,10 +18,16 @@ class FBOManager: BaseManager() {
     }
 
     /**
+     * 生成RBO
+     */
+    fun genRBO(rboIds: IntArray) {
+        GLES30.glGenRenderbuffers(rboIds.size, rboIds, 0);
+    }
+
+    /**
      * 绑定RBO
      */
     fun bindRBO(rboIds: IntArray) {
-        GLES30.glGenRenderbuffers(rboIds.size, rboIds, 0);
         GLES30.glBindRenderbuffer(GLES30.GL_RENDERBUFFER, rboIds[0]);
     }
 
@@ -113,6 +119,14 @@ class FBOManager: BaseManager() {
         //修改帧缓冲为默认的，即屏幕
         GLES30.glBindFramebuffer(GLES30.GL_FRAMEBUFFER, 0)
     }
+
+    /**
+     * 解绑RBO
+     */
+    fun unbindRBO() {
+        GLES30.glBindRenderbuffer(GLES30.GL_RENDERBUFFER, 0)
+    }
+
 
     fun deleteFBO(fboIds: IntArray) {
         GLES30.glDeleteFramebuffers(fboIds.size, fboIds, 0)
