@@ -20,6 +20,7 @@ class FBORenderer(context: Context) : Renderer {
     private var mFBOManager: FBOManager? = null
     private var mFBOIds = intArrayOf(1)
     private var mFrameTextures = intArrayOf(1)
+    private var mRBOIds = intArrayOf(1)
     private var mContext = context
     private var mProgram: TextureShaderProgram? = null
     private var mFilterShaderProgram: TextureShaderProgram? = null
@@ -28,6 +29,7 @@ class FBORenderer(context: Context) : Renderer {
 
     //是否使用FBO
     private var mIsUseFBo = true
+    private var mIsRBO = false
 
     override fun onSurfaceCreated(gl: GL10?, config: EGLConfig?) {
         GLES30.glClearColor(1.0f, 0.0f, 0.0f, 1.0f)
@@ -59,11 +61,25 @@ class FBORenderer(context: Context) : Renderer {
             mFBOManager!!.bindFBO(mFBOIds)
             mFBOManager!!.bindTexture(mFrameTextures)
             mFBOManager!!.attachTextureToFBO(mFrameTextures, width, height)
+            if (mIsRBO) {
+                mFBOManager!!.genRBO(mRBOIds)
+                mFBOManager!!.bindRBO(mRBOIds)
+                mFBOManager!!.attachRBOToFBO(
+                    GLES30.GL_DEPTH24_STENCIL8,
+                    width,
+                    height,
+                    GLES30.GL_DEPTH_STENCIL_ATTACHMENT,
+                    mRBOIds
+                )
+            }
             if (!mFBOManager!!.isCheckFBO()) {
                 Log.d("", "FBO incomplete")
             }
             mFBOManager!!.unbindTexture()
             mFBOManager!!.unbindFBO()
+            if (mIsRBO) {
+                mFBOManager!!.unbindRBO()
+            }
             mFBOManager!!.deleteFBO(mFBOIds)
         }
     }
@@ -79,6 +95,10 @@ class FBORenderer(context: Context) : Renderer {
         if (mIsUseFBo) {
             //绑定FBO
             mFBOManager!!.bindFBO(mFBOIds)
+            if (mIsRBO) {
+                mFBOManager!!.bindRBO(mRBOIds)
+                GLES30.glEnable(GLES30.GL_DEPTH_TEST)
+            }
             mFBOManager!!.bindTexture(mFrameTextures)
             //对FBO纹理附件做滤镜处理
             mFilterShaderProgram!!.bindTexture(mFrameTextures[0])
@@ -89,6 +109,10 @@ class FBORenderer(context: Context) : Renderer {
             //解绑FBO
             mFBOManager!!.unbindTexture()
             mFBOManager!!.unbindFBO()
+            if (mIsRBO) {
+                mFBOManager!!.unbindRBO()
+                GLES30.glDisable(GLES30.GL_DEPTH_TEST)
+            }
             mFBOManager!!.deleteFBO(mFBOIds)
         }
     }
