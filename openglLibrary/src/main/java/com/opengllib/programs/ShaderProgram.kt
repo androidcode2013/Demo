@@ -14,6 +14,7 @@ open class ShaderProgram(
 ) {
     companion object {
         const val TAG = "ShaderProgram"
+        const val U_MVP_MATRIX = "u_MVPMatrix"
         const val U_MATRIX = "u_Matrix"
         const val U_TIME = "u_Time"
         const val U_COLOR = "u_Color"
@@ -24,6 +25,7 @@ open class ShaderProgram(
         const val A_PARTICLE_START_TIME = "a_ParticleStartTime"
         const val A_TEXTURE_COORDINATES = "a_TextureCoordinates"
     }
+
     var program = ShaderHelper.bindProgram(
         readTextFileFromResource(context, vertexShaderResourceId!!)!!,
         readTextFileFromResource(context, fragmentShaderResourceId!!)!!
@@ -34,6 +36,7 @@ open class ShaderProgram(
     var uColorLocation = 0
     var uTextureUnitLocation = 0
     var uMatrixLocation = 0
+    var uMVPMatrix = 0
 
     init {
         aPositionLocation = GLES20.glGetAttribLocation(program, A_POSITION)
@@ -42,10 +45,15 @@ open class ShaderProgram(
         uColorLocation = GLES20.glGetUniformLocation(program, U_COLOR)
         uTextureUnitLocation = GLES20.glGetUniformLocation(program, U_TEXTURE_UNIT)
         uMatrixLocation = GLES20.glGetUniformLocation(program, U_MATRIX)
+        uMVPMatrix = GLES20.glGetUniformLocation(program, U_MVP_MATRIX)
     }
 
     fun useProgram() {
         glUseProgram(program)
+    }
+
+    fun getMvpMatrixUniformLocation(): Int {
+        return uMVPMatrix
     }
 
     fun getPositionAttributeLocation(): Int {
