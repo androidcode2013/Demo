@@ -52,6 +52,9 @@ open class ShaderProgram(
         glUseProgram(program)
     }
 
+    fun getMatrixUniformLocation(): Int {
+        return uMatrixLocation
+    }
     fun getMvpMatrixUniformLocation(): Int {
         return uMVPMatrix
     }
