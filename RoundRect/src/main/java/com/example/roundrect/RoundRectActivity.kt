@@ -3,6 +3,9 @@ package com.example.roundrect
 import android.app.Activity
 import android.opengl.GLSurfaceView
 import android.os.Bundle
+import com.example.roundrect.renderers.CirclarRectRenderer
+import com.example.roundrect.renderers.CirclarRenderer
+import com.example.roundrect.renderers.RectRenderer
 
 class RoundRectActivity : Activity() {
     private var mGLSurfaceView: GLSurfaceView? = null
@@ -11,7 +14,7 @@ class RoundRectActivity : Activity() {
         super.onCreate(savedInstanceState)
         mGLSurfaceView = GLSurfaceView(this)
         mGLSurfaceView?.setEGLContextClientVersion(3)
-        mGLSurfaceView?.setRenderer(RoundRectRenderer(this))
+        mGLSurfaceView?.setRenderer(CirclarRectRenderer(this))
         setContentView(mGLSurfaceView)
     }
 
