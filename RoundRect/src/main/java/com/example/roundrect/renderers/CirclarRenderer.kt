@@ -10,23 +10,22 @@ import kotlin.math.cos
 import kotlin.math.sin
 
 open class CirclarRenderer(context: Context) : BaseRenderer(context) {
-    private var mVerticesCircle: FloatArray? = null
-    private var mCircleVertexArray: VertexArray? = null
-
+    var mVerticesCircle: FloatArray? = null
+    var mCirclarVertexArray: VertexArray? = null
 
     init {
         mVerticesCircle = createCircle(0.5f, 100)
     }
 
-    private fun createCircle(radius: Float, n: Int): FloatArray? {
+    fun createCircle(radius: Float, n: Int): FloatArray? {
         val data = ArrayList<Float>()
-        data.add(0.0f) //设置圆心坐标
-        data.add(0.0f)
+        data.add(0.45f) //设置圆心坐标
+        data.add(0.45f)
         val angDegSpan = 360f / n
         var i = 0f
         while (i < 360 + angDegSpan) {
-            data.add((radius * sin(i * Math.PI / 180f)).toFloat())
-            data.add((radius * cos(i * Math.PI / 180f)).toFloat())
+            data.add((radius * sin(i * Math.PI / 180f)).toFloat()+0.45f)
+            data.add((radius * cos(i * Math.PI / 180f)).toFloat()+0.45f)
             i += angDegSpan
         }
         val f = FloatArray(data.size)
@@ -38,8 +37,8 @@ open class CirclarRenderer(context: Context) : BaseRenderer(context) {
 
     override fun onSurfaceCreated(gl: GL10?, config: EGLConfig?) {
         super.onSurfaceCreated(gl, config)
-        mCircleVertexArray = VertexArray(mVerticesCircle!!)
-        mCircleVertexArray?.setVertexAttribPointer(
+        mCirclarVertexArray = VertexArray(mVerticesCircle!!)
+        mCirclarVertexArray?.setVertexAttribPointer(
             0,
             mShaderProgram?.getPositionAttributeLocation()!!,
             Constant.POSITION_COMPONENT_COUNT,

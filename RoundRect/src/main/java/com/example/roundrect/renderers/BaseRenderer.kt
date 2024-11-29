@@ -23,8 +23,8 @@ open class BaseRenderer(context: Context) : Renderer {
     }
 
     override fun onSurfaceChanged(gl: GL10?, width: Int, height: Int) {
-        GLES30.glViewport(0, 0, width, height)
-
+        var side = Math.min(width, height)
+        GLES30.glViewport(0, 0, side, side)
     }
 
     override fun onDrawFrame(gl: GL10?) {
