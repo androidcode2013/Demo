@@ -12,19 +12,34 @@ import java.util.concurrent.TimeUnit
 
 
 class AsyncTaskActivity : Activity() {
+    private var mMyAsyncTask: MyAsyncTask? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.main)
-        var myAsyncTask = MyAsyncTask()
+        mMyAsyncTask = MyAsyncTask()
         //默认使用线程池THREAD_POOL_EXECUTOR
-//        myAsyncTask.execute()
+        //mMyAsyncTask?.execute()
         //创建自定义线程池
         val executor: Executor = ThreadPoolExecutor(
             10, 50, 10,
             TimeUnit.SECONDS, LinkedBlockingDeque<Runnable>(100)
         )
-        myAsyncTask.executeOnExecutor(executor)
+        mMyAsyncTask?.executeOnExecutor(executor)
+    }
+
+    override fun onPause() {
+        super.onPause()
+        if (!mMyAsyncTask!!.isCancelled){
+            Log.d("tag","onPause#cancel")
+            mMyAsyncTask?.cancel(true)
+        }
+    }
+    override fun onDestroy() {
+        super.onDestroy()
+        if (!mMyAsyncTask!!.isCancelled){
+            mMyAsyncTask?.cancel(false)
+        }
     }
 
     inner class MyAsyncTask : AsyncTask<String, Int, Long>() {
@@ -38,9 +53,16 @@ class AsyncTaskActivity : Activity() {
         }
 
         override fun doInBackground(vararg params: String?): Long {
+            Thread.sleep(10000)
             //运行在子线程
             Log.d("tag", "doInBackground#thread: ${Thread.currentThread()}")
             return 1000
+        }
+
+        override fun onCancelled() {
+            super.onCancelled()
+            Log.d("tag", "onCancelled#thread: ${Thread.currentThread()}")
+
         }
     }
 }
