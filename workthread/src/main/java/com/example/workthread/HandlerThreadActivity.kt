@@ -11,20 +11,24 @@ import android.util.Log
 import android.widget.TextView
 
 class HandlerThreadActivity : Activity() {
+    private val TAG = "HandlerThreadActivity"
     private var mUiHandler: Handler? = null
+    private var mWorkerThread: HandlerThread? = null
 
     @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.main)
-        var workThread = HandlerThread("workThread")
-        workThread.start()
+        mWorkerThread = HandlerThread("workThread")
+        Log.d(TAG,"onCreate:"+mWorkerThread?.quitSafely())
+        mWorkerThread!!.start()
         //workHandler在主线程里创建的
-        var workHandler = object : Handler(workThread.looper) {
+        Log.d(TAG,"looper:${mWorkerThread!!.looper}")
+        var workHandler = object : Handler(mWorkerThread!!.looper) {
             override fun handleMessage(msg: Message) {
                 super.handleMessage(msg)
                 //运行在子线程workThread中，可以做耗时操作
-                Log.d("tag", "workHandler#arg1: ${msg.arg1}, thread: ${Thread.currentThread()}")
+                Log.d(TAG, "workHandler#arg1: ${msg.arg1}, thread: ${Thread.currentThread()}")
                 var msg = Message()
                 msg.what = 0
                 msg.arg1 = 666
@@ -35,7 +39,7 @@ class HandlerThreadActivity : Activity() {
         mUiHandler = object : Handler(Looper.getMainLooper()) {
             override fun handleMessage(msg: Message) {
                 super.handleMessage(msg)
-                Log.d("tag", "mUiHandler#arg1: ${msg.arg1}, thread: ${Thread.currentThread()}")
+                Log.d(TAG, "mUiHandler#arg1: ${msg.arg1}, thread: ${Thread.currentThread()}")
                 when (msg.what) {
                     0 -> {
                         findViewById<TextView>(R.id.showtext).text = msg.arg1.toString()
@@ -50,5 +54,10 @@ class HandlerThreadActivity : Activity() {
         msg.what = 0
         msg.arg1 = 888
         workHandler.sendMessage(msg)
+    }
+
+    override fun onPause() {
+        super.onPause()
+        Log.d(TAG,"onPause:"+mWorkerThread?.quitSafely())
     }
 }
