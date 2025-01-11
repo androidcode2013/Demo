@@ -13,7 +13,6 @@ import android.widget.Button
 class ServiceDemoActivity : Activity() {
     private val TAG = "ServiceDemoActivity"
     private var mIntent: Intent? = null
-    private var mMyServiceConnection: MyServiceConnection? = null
     private var mIsBinded = false
 
     @SuppressLint("MissingInflatedId")
@@ -35,13 +34,14 @@ class ServiceDemoActivity : Activity() {
             val intent = Intent(this, MyService::class.java)
             intent.action = "send action"
             intent.putExtra("data", "999999")
-            mMyServiceConnection = MyServiceConnection()
-            bindService(intent, mMyServiceConnection!!, BIND_AUTO_CREATE)
+            bindService(intent, mMyServiceConnection, BIND_AUTO_CREATE)
         }
         findViewById<Button>(R.id.unbindButton).setOnClickListener {
             Log.d(TAG, "unbindService")
             mMyServiceConnection?.let {
-                unbindService(it)
+                if (mIsBinded) {
+                    unbindService(it)
+                }
             }
         }
     }
@@ -75,7 +75,7 @@ class ServiceDemoActivity : Activity() {
         }
     }
 
-    inner class MyServiceConnection : ServiceConnection {
+    private var mMyServiceConnection = object : ServiceConnection {
         override fun onServiceConnected(name: ComponentName?, service: IBinder?) {
             Log.d(TAG, "onServiceConnected")
             Log.d(TAG, "service:$service")
