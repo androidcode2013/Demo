@@ -5,6 +5,7 @@ import android.content.ComponentName
 import android.content.Intent
 import android.content.ServiceConnection
 import android.os.Bundle
+import android.os.Handler
 import android.os.IBinder
 import android.os.Message
 import android.os.Messenger
@@ -16,6 +17,15 @@ class MessengerActivity : Activity() {
     private var mMessenger: Messenger? = null
     private var mIsBinded = false
     private val MESSENGER_UPDATE = 666
+    private val CLIENT_UPDATE = 999
+    private var mClientMessenger = Messenger(object : Handler(){
+        override fun handleMessage(msg: Message) {
+            super.handleMessage(msg)
+            when(msg.what){
+                CLIENT_UPDATE -> Log.d(TAG, "client:${msg.arg1},${msg.arg2}")
+            }
+        }
+    })
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.main)
@@ -42,6 +52,7 @@ class MessengerActivity : Activity() {
                 it.what = MESSENGER_UPDATE
                 it.arg1 = 2025
                 it.arg2 = 1
+                it.replyTo = mClientMessenger
             })
             mIsBinded = true
         }
