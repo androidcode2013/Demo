@@ -8,6 +8,7 @@ import android.util.Log
 
 class MyService : Service() {
     val TAG = "MyService"
+    private var mBinder = MyLocalBinder()
     override fun onCreate() {
         super.onCreate()
         Log.d(TAG, "onCreate")
@@ -27,8 +28,7 @@ class MyService : Service() {
         var action = intent?.action
         var data = intent?.getStringExtra("data")
         Log.d(TAG, "onBind#action: $action , data : $data")
-
-        return null
+        return mBinder
     }
 
     override fun onUnbind(intent: Intent?): Boolean {
@@ -46,4 +46,17 @@ class MyService : Service() {
         stopSelf()
         super.onDestroy()
     }
+
+    /**
+     * 在服务端需要处理的业务逻辑
+     */
+    fun doSomeThings() = Intent().run {
+        putExtra("name", "service demo")
+        putExtra("year", 2025)
+    }
+
+    inner class MyLocalBinder : Binder() {
+        fun getService() = this@MyService
+    }
+
 }

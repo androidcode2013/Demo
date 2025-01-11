@@ -14,6 +14,7 @@ class ServiceDemoActivity : Activity() {
     private val TAG = "ServiceDemoActivity"
     private var mIntent: Intent? = null
     private var mMyServiceConnection: MyServiceConnection? = null
+    private var mIsBinded = false
 
     @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -77,10 +78,19 @@ class ServiceDemoActivity : Activity() {
     inner class MyServiceConnection : ServiceConnection {
         override fun onServiceConnected(name: ComponentName?, service: IBinder?) {
             Log.d(TAG, "onServiceConnected")
+            Log.d(TAG, "service:$service")
+            var myService = (service as? MyService.MyLocalBinder)?.getService()
+            Log.d(TAG, "myService:$myService")
+
+            myService?.doSomeThings()?.run {
+                Log.d(TAG, "name: ${getStringExtra("name")}, year:${getIntExtra("year", -1)}")
+            }
+            mIsBinded = true
         }
 
         override fun onServiceDisconnected(name: ComponentName?) {
             Log.d(TAG, "onServiceDisconnected")
+            mIsBinded = false
         }
 
     }
