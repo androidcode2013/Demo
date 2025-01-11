@@ -1,16 +1,66 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <Button
+        android:id="@+id/startButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/startservice"
+        android:textAllCaps="false"
+        android:textColor="#0000ff"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/stopButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/stopservice"
+        android:textAllCaps="false"
+        android:textColor="#0000ff"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/startButton" />
+
+    <Button
+        android:id="@+id/bindButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/bindservice"
+        android:textAllCaps="false"
+        android:textColor="#0000ff"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/stopButton" />
+
+    <Button
+        android:id="@+id/unbindButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/unbindservice"
+        android:textAllCaps="false"
+        android:textColor="#0000ff"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/bindButton" />
+
     <TextView
         android:id="@+id/showtext"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="#ff00ff"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:text="@string/haha"
         android:textColor="#000000"
-        tools:ignore="MissingConstraints"
-        android:text="haha"
-        android:background="#ff00ff"/>
+        app:layout_constraintDimensionRatio="H,16:9"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/unbindButton" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

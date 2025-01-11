@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">WorkThread</string>
+    <string name="startservice">startService</string>
+    <string name="stopservice">stopService</string>
+    <string name="haha">haha1111111111111111111111111111111111111111111111hhhhhhhhhhhhhhhhhhhhhhhhhh</string>
+    <string name="bindservice">bindService</string>
+    <string name="unbindservice">unBindService</string>
+    <string name="rebindservice">reBindService</string>
 </resources>
