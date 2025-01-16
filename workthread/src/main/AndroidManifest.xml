@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <!--    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />-->
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
 
     <application
         android:icon="@mipmap/ic_launcher"
@@ -11,13 +11,14 @@
         android:theme="@style/Theme.Demo">
         <activity
             android:name=".ClientActivity"
-            android:exported="true">
+            android:exported="true"
+            android:process="com.example.workthread">
             <intent-filter>
                 <category android:name="android.intent.category.LAUNCHER" />
                 <action android:name="android.intent.action.MAIN" />
             </intent-filter>
         </activity>
-        <!--        <activity android:name=".MainActivity"/>-->
+        <activity android:name=".MainActivity" />
 
         <service
             android:name=".MyService"
@@ -28,10 +29,11 @@
         </service>
         <service
             android:name=".MessengerService"
-            android:exported="true"/>
+            android:exported="true" />
         <service
             android:name=".RemoteService"
-            android:exported="true" />
+            android:exported="true"
+            android:process=":remote" />
     </application>
 
 </manifest>

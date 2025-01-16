@@ -13,7 +13,7 @@ import android.util.Log
 
 class RemoteService : Service() {
     private val TAG = "RemoteService"
-//    private val channelId = "1"
+    private val channelId = "1"
 
 
     private var binder = object : IRemoteService.Stub() {
@@ -30,7 +30,7 @@ class RemoteService : Service() {
     override fun onCreate() {
         Log.d(TAG, "onCreate")
         super.onCreate()
-//        showServiceNotification()
+        showServiceNotification()
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
@@ -58,30 +58,30 @@ class RemoteService : Service() {
         super.onDestroy()
     }
 
-//    @SuppressLint("ForegroundServiceType")
-//    fun showServiceNotification() {
-//        Log.d(TAG,"showServiceNotification")
-//        //创建channel
-//        val name = "my channel."
-//        val importance = NotificationManager.IMPORTANCE_DEFAULT
-//        val mChannel = NotificationChannel(channelId, name, importance)
-//        val notificationManager = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
-//        notificationManager.createNotificationChannel(mChannel)
-//
-//        //创建一个PendingIntent，当点击通知时，可以跳到指定Activity
-//        val pendingIntent: PendingIntent = Intent(this, MainActivity::class.java).let {
-//            PendingIntent.getActivity(this, 0, it, PendingIntent.FLAG_MUTABLE)
-//        }
-//
-//        //创建通知对象
-//        val notification: Notification = Notification.Builder(this, channelId)
-//            .setContentTitle("标题")
-//            .setContentText("内容")
-//            .setSmallIcon(R.drawable.ic_launcher_background)
-//            .setContentIntent(pendingIntent)
-//            .build()
-//
-//        //注意这个id不能是0，否则会报异常
-//        startForeground(1, notification)
-//    }
+    @SuppressLint("ForegroundServiceType")
+    fun showServiceNotification() {
+        Log.d(TAG,"showServiceNotification")
+        //创建channel
+        val name = "my channel."
+        val importance = NotificationManager.IMPORTANCE_DEFAULT
+        val mChannel = NotificationChannel(channelId, name, importance)
+        val notificationManager = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
+        notificationManager.createNotificationChannel(mChannel)
+
+        //创建一个PendingIntent，当点击通知时，可以跳到指定Activity
+        val pendingIntent: PendingIntent = Intent(this, MainActivity::class.java).let {
+            PendingIntent.getActivity(this, 0, it, PendingIntent.FLAG_MUTABLE)
+        }
+
+        //创建通知对象
+        val notification: Notification = Notification.Builder(this, channelId)
+            .setContentTitle("前台服务通知")
+            .setContentText("点击通知跳转到另一个Activity")
+            .setSmallIcon(R.drawable.ic_launcher_background)
+            .setContentIntent(pendingIntent)
+            .build()
+
+        //注意这个id不能是0，否则会报异常
+        startForeground(1, notification)
+    }
 }
