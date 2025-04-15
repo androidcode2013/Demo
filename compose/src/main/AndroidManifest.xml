@@ -9,9 +9,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Demo">
         <activity
-            android:name=".ui.ComposeActivity"
+            android:name=".ui.DiceRollerActivity"
             android:exported="true"
-            android:label="@string/title_activity_compose"
+            android:label="@string/title_activity_dice_roller"
             android:theme="@style/Theme.Demo">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -20,9 +20,9 @@
             </intent-filter>
         </activity>
 <!--        <activity-->
-<!--            android:name=".ui.TickActivity"-->
+<!--            android:name=".ui.ComposeActivity"-->
 <!--            android:exported="true"-->
-<!--            android:label="@string/title_activity_tick"-->
+<!--            android:label="@string/title_activity_compose"-->
 <!--            android:theme="@style/Theme.Demo">-->
 <!--            <intent-filter>-->
 <!--                <action android:name="android.intent.action.MAIN" />-->
